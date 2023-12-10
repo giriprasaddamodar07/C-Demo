@@ -1,0 +1,142 @@
+private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+{
+    //get the textbox that fired the event
+    var textBox = sender as TextBox;
+    if (textBox == null) return;
+
+    var text = textBox.Text;
+    var output = new StringBuilder();
+    //use this boolean to determine if the dot already exists
+    //in the text so far.
+    var dotEncountered = false;
+    //loop through all of the text
+    for (int i = 0; i < text.Length; i++)
+    {
+        var c = text[i];
+        if (char.IsDigit(c))
+        {
+            //append any digit.
+            output.Append(c);
+        }
+        else if (!dotEncountered && c == '.') 
+        {
+            //append the first dot encountered
+            output.Append(c);
+            dotEncountered = true;
+        }
+    }
+    var newText = output.ToString();
+    textBox.Text = newText;
+    //set the caret to the end of text
+    textBox.CaretIndex = newText.Length;
+}
+---------------------------------------------------------------------
+TextCompositionEventHandler textBox_PreviewTextInput = 
+    new TextCompositionEventHandler((s, e) => e.Handled = !e.Text.All(
+    c => Char.IsNumber(c) || c == '.'));
+KeyEventHandler textBox_PreviewKeyDown = new KeyEventHandler(
+    (s, e) => e.Handled = e.Key == Key.Space);
+
+textBox.PreviewTextInput += textBox_PreviewTextInput;
+textBox.PreviewKeyDown += textBox_PreviewKeyDown;
+-------------------------------------------------------------------
+protected void Button1_Click(object sender, EventArgs e)
+    {
+        {
+            int input = int.Parse(InputBox.Text);
+            if (input > 15)
+            {
+                String hot;
+                hot = "hot";
+                Result.Text = hot;
+                Result.BackColor = System.Drawing.Color.Red;
+            }
+            else if (input <= 15)
+            {
+                String cold;
+                cold = "cold";
+                Result.Text = cold;
+                Result.BackColor = System.Drawing.Color.Blue;
+            }
+        }
+    }
+--------------------------------------------------------------------------
+try{
+    int input = int.Parse(InputBox.Text);
+    //add any addition logic you need here
+}
+catch{
+    Result.Text="Not a number";
+}
+------------------------------------------------------------------------
+if ((Regex.IsMatch(InputBox.Text, @"^[0-9]+$")))
+        {
+            try
+            {
+-------------------------------------------------------------------private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar.ToString(), @"^[0-9\b?]$"))
+                e.Handled = true;
+        }
+-----------------------------------------------------------------------------------------------------------------
+private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+
+            int i = 0;
+
+            textBox5.Text = textBox5.Text.Trim();
+
+            if (Int32.TryParse(textBox5.Text, out i))
+            {
+
+                temptb = textBox5.Text;
+
+            }
+
+            else
+
+                textBox5.Text = temptb;
+
+            textBox5.SelectionStart = textBox5.Text.Length;
+
+
+
+           
+        }
+----------------------------------------------------------------------------------------------------------
+using System.Linq;
+	using System.Globalization;
+	using System.Windows.Forms;
+
+	public partial class AppMain : Form
+	{
+		private readonly NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
+
+		private readonly char[] signs;
+
+		public AppMain()
+		{
+			InitializeComponent();
+
+			signs = new[]
+			{
+				char.Parse(numberFormatInfo.NumberDecimalSeparator),
+				char.Parse(numberFormatInfo.NumberGroupSeparator),
+				char.Parse(numberFormatInfo.NegativeSign)
+			};
+
+			textBox1.KeyPress += TextBox1KeyPress;
+		}
+
+		private void TextBox1KeyPress(object sender, KeyPressEventArgs e)
+		{
+			bool exists = signs.Any(ch => e.KeyChar == ch);
+
+			if (exists || e.KeyChar >= 48 && e.KeyChar <= 57 || e.KeyChar == 8)
+			{
+				return;
+			}
+
+			e.Handled = true;
+		}
+	}
